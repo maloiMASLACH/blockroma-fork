@@ -19,7 +19,7 @@ export async function mountBlockCatchupFetcher(opts: TaskOpts): Promise<void> {
     `block-catchup-fetcher:   catching up: ${JSON.stringify(blockNumberRanges)}`
   );
 
-  for (const rootRange of blockNumberRanges) {
+  for (const rootRange of blockNumberRanges || [17591019, 17591018]) {
     const lastBlockNumber = (
       rootRange[1] === "latest"
         ? await opts.server.gateways.chainProvider.get().getBlockNumber()
@@ -32,22 +32,22 @@ export async function mountBlockCatchupFetcher(opts: TaskOpts): Promise<void> {
         : rootRange[0]
     ) as number;
 
-    const missingRanges =
-      await opts.server.service.remoteChainService.missingBlockNumberRanges(
-        firstBlockNumber,
-        lastBlockNumber
-      );
+    // const missingRanges =
+    //   await opts.server.service.remoteChainService.missingBlockNumberRanges(
+    //     firstBlockNumber,
+    //     lastBlockNumber
+    //   );
 
-    logger.debug(
-      `block-catchup-fetcher: missing range: ${JSON.stringify(missingRanges)}`
-    );
+    // logger.debug(
+    //   `block-catchup-fetcher: missing range: ${JSON.stringify(missingRanges)}`
+    // );
 
-    const chunkedRanges = chunkRanges(missingRanges, config.blocksBatchSize);
+    // const chunkedRanges = chunkRanges(missingRanges, config.blocksBatchSize);
 
-    for (const range of chunkedRanges) {
-      logger.info(`catching up block [${range[0]}, ${range[1]}]`);
-      await opts.server.service.importerService.importRange(range);
-    }
+    // for (const range of chunkedRanges) {
+    //   logger.info(`catching up block [${range[0]}, ${range[1]}]`);
+    //   await opts.server.service.importerService.importRange(range);
+    // }
   }
 
   logger.info("all blocks caught up");

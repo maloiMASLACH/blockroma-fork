@@ -1,27 +1,10 @@
-const { config } = require("dotenv");
-config();
-
-const routePrefix = "";
+const routePrefix = "/eth/mainnet";
 
 module.exports = {
-  project: "blockroma",
-  chain: {
-    chainId: 7778,
-    chainName: "BoomMo Chain",
-    symbol: "BMO",
-    rpcUrls: ["https://api-testnet.boommo.com"],
-    decimals: 18,
-    networkPath: "",
-  },
   server: {
+    siteOrigin: undefined,
     routePrefix,
     port: process.env.PORT || 4134,
-    proxy: false,
-    staticDir: "./dist",
-    delayInitMiddleware: false,
-    cookie: {
-      secrets: ["insecure plain text", "insecure secret here"],
-    },
     noSecurityHeadersRoutes: {
       [`${routePrefix}/api-gateway/`]: true,
       [`${routePrefix}/api/`]: true,
@@ -30,47 +13,34 @@ module.exports = {
       [`${routePrefix}/api-gateway/`]: true,
       [`${routePrefix}/api/`]: true,
     },
+    cookie: {
+      secrets: ["insecure plain text", "insecure secret here"],
+    },
+  },
+  chain: {
+    chainId: 1,
+    chainName: "Ethereum",
+    symbol: "ETH",
+    rpcUrls: ['https://ethereum.publicnode.com'],
+    decimals: 18,
+    networkPath: routePrefix,
+    
   },
   indexer: {
     catchup: {
-      enabled: true,
-      blocksBatchSize: 200,
-
-      blockNumberRanges: [[2324586, 2324586]],
+      enabled: false,
     },
     realtime: {
       enabled: true,
     },
   },
   gateways: {
-    logger: {
-      enabled: true,
-      level: "debug",
-    },
-    postgresql: {
-      uri: process.env.DATABASE_URL,
-      ssl: String(process.env.DATABASE_URL).includes(".com"),
-    },
-  },
-  analytics: {
-    gaMeasurementId: "G-VKPSYZ2K22",
-  },
-  // csp: {
-  //   enabled:false,
-  //   "default-src": ["none"],
-  //   "manifest-src": ["self"],
-  //   "style-src": ["self", "unsafe-inline", "https://fonts.googleapis.com/css"],
-  //   "frame-src": [],
-  //   "connect-src": [
-  //     "self",
-  //     "https://www.google-analytics.com/",
-  //     ...(process.env.API_GATEWAY_URL ? [process.env.API_GATEWAY_URL] : []),
-  //   ],
-  //   "child-src": ["self"],
-  //   "font-src": ["self", "data:", "https://fonts.gstatic.com/"],
-  //   "img-src": ["*", "data:"],
-  //   "media-src": ["self"],
-  //   "object-src": ["self"],
-  //   "script-src": ["self", "https://www.googletagmanager.com/"],
-  // },
+   logger: {
+     enabled: false,
+   },
+   postgresql: {
+     uri: process.env.DATABASE_URL,
+     ssl: String(process.env.DATABASE_URL).includes(".com"),
+   },
+ },
 };

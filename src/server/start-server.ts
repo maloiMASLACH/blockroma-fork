@@ -44,7 +44,7 @@ export type MyServer = Server & {
 export async function startServer(): Promise<Server> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const server: MyServer = new Server(config as any as Config) as MyServer;
-  server.app.proxy = Boolean(config.get("server.proxy"));
+  server.app.proxy = false;
   logger.info(`chain config: ${JSON.stringify(server.config.chain, null, 2)}`);
   await setGateways(server);
   setMiddleware(server);
